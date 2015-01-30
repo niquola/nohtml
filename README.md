@@ -1,12 +1,10 @@
-fhirbase presentation app
+NoHTML
 ======================
 
+Imagine there are no html, no css and no religion too!
+
+
 ```sh
- # install nvm
- nvm use 0.10
-
  npm install
- npm start # to start dev server on localhost:8080
- npm run-script fhir # to pubhish on fhirplace
-
+ env PORT=8080 npm start
 ```

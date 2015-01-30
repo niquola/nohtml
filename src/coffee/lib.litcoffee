@@ -9,32 +9,35 @@ The main functoion `render` accept document as json object and rerender whole bo
 
 We call main ondocument loaded and render, then attach to body events:
 
-    $ ->
-      doc = main
-      render(doc)
-      $('body').on 'click',(e)-> dispatch('click',e)
-      $('body').on 'input',(e)-> dispatch('input',e)
-      $('body').on 'keyup',(e)-> dispatch('keyup',e)
+    global = {doc: null}
+
+    module.exports = (cb)->
+      $ ->
+        global.doc = cb()
+        render(global.doc)
+        $('body').on 'click',(e)-> dispatch('click',e, global.doc)
+        $('body').on 'input',(e)-> dispatch('input',e, global.doc)
+        $('body').on 'keyup',(e)-> dispatch('keyup',e, global.doc)
 
 While dispatch we get the target element and find object
 in json document, then calling handler with obj, path, document:
 
-    dispatch = (tp, e)->
+    dispatch = (tp, e, doc)->
       trg = e.target
       pth = trg.id.split '-'
-      model = getp doc, pth
+      model = getIn doc, pth
       if model
         if tp == 'click' && model.onclick
-          model.onclick(model, pth, doc)
-          render doc
+          global.doc = model.onclick(model, pth, doc)
+          render global.doc
         if tp == 'input' && model.oninput
-          if model.oninput.filter && model.oninput.filter.indexOf e.which > -1
-            model.oninput.fn(model, pth,doc)
-            render doc
+          if model.oninput.filter && model.oninput.filter.indexOf(e.which) > -1
+            global.doc = model.oninput.fn(model, pth,doc)
+            render global.doc
         if tp == 'keyup' && model.onkeyup
-          if model.onkeyup.filter && model.onkeyup.filter.indexOf e.which > -1
-            model.onkeyup.fn(model, pth,doc)
-            render(doc)
+          if model.onkeyup.filter && model.onkeyup.filter.indexOf(e.which) > -1
+            global.doc = model.onkeyup.fn(model, pth,doc)
+            render(global.doc)
             $('#' + pth.join '-').focus()
 
 
@@ -48,10 +51,10 @@ every object as div or use value of _tag attribute:
         if v._text
           node.text(v._text)
         else
-          for k in v when k.indexOf('_') != 0
-              node.append(
-                  renderRecur(
-                    conj(path, k), v[k]))
+          for k,vv of v when k.indexOf('_') != 0
+            node.append(
+                renderRecur(
+                  conj(path, k), vv))
       else
         node.text(JSON.stringify(v))
 
@@ -74,16 +77,7 @@ Here small set of util functions:
     getIn = (doc, path)->
       idx=-1
       val = doc
-      while idx++ < path.length && val
+      while idx++ < path.length - 1 && val
         val = val[path[idx]]
       val
-
-    dissoc = (doc, path)->
-      idx=-1
-      val = doc
-      while idx++ < (path.length - 1) && val
-        val = val[path[idx]]
-        if val
-          delete val[path[path.length - 1]]
-      doc
 

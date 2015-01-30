@@ -13,7 +13,7 @@ module.exports = {
       { test: /\.coffee$/, loader: "coffee-loader" },
       { test: /\.png$/, loader: "file-loader" },
       { test: /\.gif$/, loader: "file-loader" },
-      { test: /\.(ttf|eot|woff|svg|swf)$/, loader: "file-loader" },
+      { test: /\.(ttf|eot|woff|woff2|svg|swf)$/, loader: "file-loader" },
       { test: /\.eot$/, loader: "file-loader" },
       { test: /\.less$/,   loader: etx.extract("style-loader","css-loader!less-loader")},
       { test: /\.css$/,    loader: etx.extract("style-loader", "css-loader") }

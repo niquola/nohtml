@@ -5,6 +5,7 @@
   "devDependencies": {
     "fhirbase.js": "0.0.3",
     "bower": "latest",
+    "jquery": "latest",
     "coffee": "latest",
     "coffee-loader": "latest",
     "css-loader": "latest",
