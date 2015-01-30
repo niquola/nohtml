@@ -1,0 +1,30 @@
+{
+  "name": "fhirbase-empty-plugin",
+  "version": "0.0.0",
+  "dependencies": {},
+  "devDependencies": {
+    "fhirbase.js": "0.0.3",
+    "bower": "latest",
+    "coffee": "latest",
+    "coffee-loader": "latest",
+    "css-loader": "latest",
+    "html-loader": "latest",
+    "less-loader": "latest",
+    "file-loader": "latest",
+    "ng-cache-loader": "latest",
+    "markdown-loader":"latest",
+    "style-loader": "latest",
+    "webpack": "latest",
+    "extract-text-webpack-plugin": "latest",
+    "webpack-dev-server": "latest"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "install": "bower prune && bower install",
+    "start": "bower prune && bower install && webpack-dev-server --port $PORT --progress --colors",
+    "build": "npm install && rm -rf dist && webpack --progress --colors",
+    "fhir": "npm run-script build && `npm bin`/fhirbase"
+  }
+}
